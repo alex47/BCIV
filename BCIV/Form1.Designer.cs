@@ -32,6 +32,7 @@
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.previousImageButton = new System.Windows.Forms.Button();
             this.nextImageButton = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
             this.imagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
@@ -75,12 +76,23 @@
             this.nextImageButton.Click += new System.EventHandler(this.nextImageButton_Click);
             this.nextImageButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.nextImageButton_PreviewKeyDown);
             // 
+            // editButton
+            // 
+            this.editButton.Location = new System.Drawing.Point(697, 556);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(75, 23);
+            this.editButton.TabIndex = 3;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editButton_PreviewKeyDown);
+            // 
             // BCIV_form
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 591);
+            this.Controls.Add(this.editButton);
             this.Controls.Add(this.nextImageButton);
             this.Controls.Add(this.previousImageButton);
             this.Controls.Add(this.imagePanel);
@@ -102,6 +114,7 @@
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Button previousImageButton;
         private System.Windows.Forms.Button nextImageButton;
+        private System.Windows.Forms.Button editButton;
     }
 }
 

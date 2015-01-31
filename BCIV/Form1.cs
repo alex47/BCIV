@@ -38,7 +38,7 @@ namespace BCIV
             init();
         }
 
-        //Called when there is one init image and I expect this to be the most case
+        //Called when there is one init image OR a directory
         public BCIV_form(string imagePath)
         {
             InitializeComponent();
@@ -76,31 +76,38 @@ namespace BCIV
         {
             images.Clear();
 
-            bool isSupported = false;
-            isGroupImages = false;
-
-            for (int i = 0; i < supportedFormats.Length; i++)
+            if (File.Exists(imagePath))
             {
-                if (imagePath.ToLower().EndsWith(supportedFormats[i]))
+                bool isSupported = false;
+                isGroupImages = false;
+
+                for (int i = 0; i < supportedFormats.Length; i++)
                 {
-                    isSupported = true;
-                    break;
+                    if (imagePath.ToLower().EndsWith(supportedFormats[i]))
+                    {
+                        isSupported = true;
+                        break;
+                    }
+                }
+
+                if (isSupported)
+                {
+                    loadAllImagesInDirectory(imagePath);
+
+                    loadImageToPictureBox(images[0]);
+                    currentIndex = 0;
+                }
+                else
+                {
+                    MessageBox.Show("File format not supported!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
-
-            if (isSupported)
+            else if (Directory.Exists(imagePath))
             {
                 loadAllImagesInDirectory(imagePath);
 
                 loadImageToPictureBox(images[0]);
-                currentIndex = 0;
-
-                //resizeWindowToLoadedImage();
-            }
-            else
-            {
-                MessageBox.Show("File format not supported!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
 
@@ -127,8 +134,6 @@ namespace BCIV
             {
                 loadImageToPictureBox(images[0]);
                 currentIndex = 0;
-
-                //resizeWindowToLoadedImage();
             }
 
             images = images.Distinct().ToList();
@@ -320,6 +325,12 @@ namespace BCIV
 
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
+            editButton.Location = new Point(this.Width - 103, this.Height - 74);
+
+            if (pictureBox.Image == null || loadedImage == null)
+            {
+                return;
+            }
                         
             float ratio;
             int newWidth, newHeight;
@@ -372,23 +383,27 @@ namespace BCIV
         {
             keyEvents(e.KeyCode);
         }
-
+                
+        private void editButton_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            keyEvents(e.KeyCode);
+        }
+        
         private void keyEvents(Keys key)
         {
             if (key.ToString() == "Left" || key.ToString() == "Up")
             {
                 previousImageButton_Click(null, null);
             }
-            else if(key.ToString() == "Right" || key.ToString() == "Down")
+            else if (key.ToString() == "Right" || key.ToString() == "Down")
             {
                 nextImageButton_Click(null, null);
             }
             else
             {
-//TODO: + (Add) - (Subtract) ZOOM image
+                //TODO: + (Add) - (Subtract) ZOOM image
                 //MessageBox.Show("LENYOMVA: " + key);
             }
         }
-
     }
 }
