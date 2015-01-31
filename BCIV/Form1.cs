@@ -125,7 +125,7 @@ namespace BCIV
             loadedImage = Image.FromFile(imagePath);
             resizeWindowToLoadedImage();
 
-            pictureBox.Image = loadedImage;            
+            //pictureBox.Image = loadedImage;            
         }
 
         private void resizeWindowToLoadedImage()
@@ -135,49 +135,26 @@ namespace BCIV
 
             if (loadedImage.Width > screenWidth || loadedImage.Height > screenHeight)
             {
+                float ratio;
                 int newWidth, newHeight;
+                
+                ratio = (float)screenHeight / loadedImage.Height;
 
-                if (loadedImage.Width > loadedImage.Height)
-                {
-                    float ratio = (float)screenHeight / loadedImage.Height;
-
-                    newWidth = (int)(ratio * loadedImage.Width);
-                    newHeight = (int)(ratio * loadedImage.Height);
-
-                    //Some resolutions work in a mysterious way
-                    if (newWidth < screenWidth)
-                    {
-                        ratio = (float)screenWidth / loadedImage.Width;
-
-                        newWidth = (int)(ratio * loadedImage.Width);
-                        newHeight = (int)(ratio * loadedImage.Height);
-                    }
-                }
-                else
-                {
-                    float ratio = (float)screenWidth / loadedImage.Width;
-
-                    newWidth = (int)(ratio * loadedImage.Width);
-                    newHeight = (int)(ratio * loadedImage.Height);
-
-
-                    if (newHeight < screenHeight)
-                    {
-                        ratio = (float)screenHeight / loadedImage.Height;
-
-                        newWidth = (int)(ratio * loadedImage.Width);
-                        newHeight = (int)(ratio * loadedImage.Height);
-                    }
-                }
+                newWidth = (int)(ratio * loadedImage.Width);
+                newHeight = (int)(ratio * loadedImage.Height);
 
                 this.Width = newWidth;
-                this.Height = newHeight;                
+                this.Height = newHeight;
+//TODO: GIF image resolution larger than screen resolution will display as static image
+                pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(imagePanel.Width - 7, imagePanel.Height - 7)));
             }
             else
             {
                 this.Width = loadedImage.Width + 50;
                 this.Height = loadedImage.Height + 103;
-            }
+
+                pictureBox.Image = loadedImage;
+            }            
         }
 
         //Adds all the images in the directory to the list
