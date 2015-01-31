@@ -62,6 +62,7 @@
             this.previousImageButton.Text = "Previous";
             this.previousImageButton.UseVisualStyleBackColor = true;
             this.previousImageButton.Click += new System.EventHandler(this.previousImageButton_Click);
+            this.previousImageButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.previousImageButton_PreviewKeyDown);
             // 
             // nextImageButton
             // 
@@ -72,6 +73,7 @@
             this.nextImageButton.Text = "Next";
             this.nextImageButton.UseVisualStyleBackColor = true;
             this.nextImageButton.Click += new System.EventHandler(this.nextImageButton_Click);
+            this.nextImageButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.nextImageButton_PreviewKeyDown);
             // 
             // BCIV_form
             // 

@@ -17,7 +17,6 @@ namespace BCIV
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Opened without arguments, no image
             switch(args.Length)
             {
                 case 0:

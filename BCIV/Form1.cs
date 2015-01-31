@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,8 @@ namespace BCIV
 
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
+
+            this.KeyPreview = true;
 
 //TODO: set window start location to (0, 0)            
         }
@@ -146,7 +149,58 @@ namespace BCIV
                 this.Width = newWidth;
                 this.Height = newHeight;
 //TODO: GIF image resolution larger than screen resolution will display as static image
+
+
+
+
+
+
+
+
+
+                FrameDimension dimension = new FrameDimension(loadedImage.FrameDimensionsList[0]);
+
+                if(images[currentIndex].ToLower().EndsWith("gif") && loadedImage.GetFrameCount(dimension) > 1)
+                {
+                    
+                }
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(imagePanel.Width - 7, imagePanel.Height - 7)));
+
+
+
+
+
+
+
+
+
+
             }
             else
             {
@@ -237,6 +291,32 @@ namespace BCIV
 
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
+
+//TODO: maybe call here resizeWindowToLoadedImage()
         }
+
+        private void previousImageButton_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            keyEvents(e.KeyCode);
+        }
+
+        private void nextImageButton_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            keyEvents(e.KeyCode);
+        }
+
+        private void keyEvents(Keys key)
+        {
+            if (key.ToString() == "Left" || key.ToString() == "Up")
+            {
+                previousImageButton_Click(null, null);
+            }
+
+            if(key.ToString() == "Right" || key.ToString() == "Down")
+            {
+                nextImageButton_Click(null, null);
+            }
+        }
+
     }
 }
