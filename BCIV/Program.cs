@@ -12,11 +12,24 @@ namespace BCIV
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            //Opened without arguments, no image
+            switch(args.Length)
+            {
+                case 0:
+                    Application.Run(new BCIV_form());
+                    break;
+                case 1:
+                    Application.Run(new BCIV_form(args[0]));
+                    break;
+                default:
+                    Application.Run(new BCIV_form(args));
+                    break;
+            }
         }
     }
 }
