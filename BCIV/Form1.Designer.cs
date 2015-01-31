@@ -84,6 +84,7 @@
             this.Controls.Add(this.nextImageButton);
             this.Controls.Add(this.previousImageButton);
             this.Controls.Add(this.imagePanel);
+            this.MinimumSize = new System.Drawing.Size(320, 240);
             this.Name = "BCIV_form";
             this.Text = "BCIV";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BCIV_form_DragDrop);

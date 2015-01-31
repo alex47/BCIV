@@ -69,17 +69,6 @@ namespace BCIV
 
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
-
-
-
-
-
-
-
-
-
-
-
         }
 
         //Adds the image to the list and adds all the images in the directory to the list
@@ -150,6 +139,11 @@ namespace BCIV
         {
             loadedImage = Image.FromFile(imagePath);
             resizeWindowToLoadedImage();
+
+            int newX = (imagePanel.Width / 2) - (pictureBox.Width / 2);
+            int newY = (imagePanel.Height / 2) - (pictureBox.Height / 2);
+
+            pictureBox.Location = new Point(newX, newY);
 
             //pictureBox.Image = loadedImage;
 
@@ -326,8 +320,47 @@ namespace BCIV
 
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
+                        
+            float ratio;
+            int newWidth, newHeight;
 
-//TODO: maybe call here resizeWindowToLoadedImage()
+            if(pictureBox.Width > pictureBox.Height)
+            {                   
+                ratio = (float)imagePanel.Width / loadedImage.Width;
+
+                newWidth = (int)(ratio * loadedImage.Width) - 5;
+                newHeight = (int)(ratio * loadedImage.Height) - 5;
+
+                if (newHeight > imagePanel.Height)
+                {
+                    ratio = (float)imagePanel.Height / loadedImage.Height;
+
+                    newWidth = (int)(ratio * loadedImage.Width) - 5;
+                    newHeight = (int)(ratio * loadedImage.Height) - 5;
+                }
+            }
+            else
+            {
+                ratio = (float)imagePanel.Height / loadedImage.Height;
+
+                newWidth = (int)(ratio * loadedImage.Width) - 5;
+                newHeight = (int)(ratio * loadedImage.Height) - 5;
+
+                if (newWidth > imagePanel.Width)
+                {
+                    ratio = (float)imagePanel.Width / loadedImage.Width;
+
+                    newWidth = (int)(ratio * loadedImage.Width) - 5;
+                    newHeight = (int)(ratio * loadedImage.Height) - 5;
+                }
+            }
+
+            pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(newWidth, newHeight)));
+
+            int newX = (imagePanel.Width / 2) - (pictureBox.Width / 2) ;
+            int newY = (imagePanel.Height / 2) - (pictureBox.Height / 2);
+
+            pictureBox.Location = new Point(newX, newY);
         }
 
         private void previousImageButton_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
