@@ -61,7 +61,19 @@ namespace BCIV
 
             this.KeyPreview = true;
 
-//TODO: set window start location to (0, 0)            
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(0, 0);
+
+
+
+
+
+
+
+
+
+
+
         }
 
         //Adds the image to the list and adds all the images in the directory to the list
@@ -128,7 +140,8 @@ namespace BCIV
             loadedImage = Image.FromFile(imagePath);
             resizeWindowToLoadedImage();
 
-            //pictureBox.Image = loadedImage;            
+            //pictureBox.Image = loadedImage;
+//TODO: change window title to file name or path
         }
 
         private void resizeWindowToLoadedImage()
@@ -192,15 +205,9 @@ namespace BCIV
 
                 pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(imagePanel.Width - 7, imagePanel.Height - 7)));
 
+                this.Location = new Point(this.Location.X, 0);
 
-
-
-
-
-
-
-
-
+                
             }
             else
             {
@@ -208,7 +215,22 @@ namespace BCIV
                 this.Height = loadedImage.Height + 103;
 
                 pictureBox.Image = loadedImage;
-            }            
+            }
+
+            if (this.Location.X + this.Width > screenWidth)
+            {
+                this.Location = new Point(screenWidth - this.Width, this.Location.Y);
+            }
+
+            if(this.Location.X < 0)
+            {
+                this.Location = new Point(0, this.Location.Y);
+            }
+
+            if(this.Location.Y + this.Height > screenHeight)
+            {
+                this.Location = new Point(this.Location.X, screenHeight - this.Height);
+            }
         }
 
         //Adds all the images in the directory to the list
@@ -311,10 +333,14 @@ namespace BCIV
             {
                 previousImageButton_Click(null, null);
             }
-
-            if(key.ToString() == "Right" || key.ToString() == "Down")
+            else if(key.ToString() == "Right" || key.ToString() == "Down")
             {
                 nextImageButton_Click(null, null);
+            }
+            else
+            {
+//TODO: + (Add) - (Subtract) ZOOM image
+                //MessageBox.Show("LENYOMVA: " + key);
             }
         }
 
