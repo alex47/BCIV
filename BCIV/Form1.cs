@@ -29,6 +29,7 @@ namespace BCIV
 
         private Image loadedImage;
         private int currentIndex;
+        private bool isGroupImages;
 
         //Called without init image
         public BCIV_form()
@@ -56,6 +57,7 @@ namespace BCIV
             pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             imagePanel.AutoScroll = true;
 
+
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
 
@@ -79,7 +81,10 @@ namespace BCIV
         //Adds the image to the list and adds all the images in the directory to the list
         private void loadOneImage(string imagePath)
         {
+            images.Clear();
+
             bool isSupported = false;
+            isGroupImages = false;
 
             for (int i = 0; i < supportedFormats.Length; i++)
             {
@@ -110,6 +115,8 @@ namespace BCIV
         private void loadMultipleImages(string[] imagesPath)
         {
             images.Clear();
+
+            isGroupImages = true;
 
             foreach(string filePath in imagesPath)
             {
@@ -162,53 +169,23 @@ namespace BCIV
 
                 this.Width = newWidth;
                 this.Height = newHeight;
+
+
+
+
 //TODO: GIF image resized will display as static image
-
-
-
-
-
-
-
-
-
                 FrameDimension dimension = new FrameDimension(loadedImage.FrameDimensionsList[0]);
 
                 if(images[currentIndex].ToLower().EndsWith("gif") && loadedImage.GetFrameCount(dimension) > 1)
                 {
                     
                 }
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
                 pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(imagePanel.Width - 7, imagePanel.Height - 7)));
 
                 this.Location = new Point(this.Location.X, 0);
-
-                
             }
             else
             {
@@ -287,6 +264,11 @@ namespace BCIV
                     currentIndex = 0;
                 }
 
+                if(!File.Exists(images[currentIndex]))
+                {
+                    checkExistingImages();
+                }
+
                 loadImageToPictureBox(images[currentIndex]);
             }
         }
@@ -304,8 +286,34 @@ namespace BCIV
                     currentIndex = images.Count - 1;
                 }
 
+                if (!File.Exists(images[currentIndex]))
+                {
+                    checkExistingImages();
+                }
+
                 loadImageToPictureBox(images[currentIndex]);
             }
+        }
+
+        private void checkExistingImages()
+        {
+            if(isGroupImages)
+            {
+                for (int i = 0; i < images.Count; i++)
+                {
+                    if (!File.Exists(images[i]))
+                    {
+                        images.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            else
+            {
+                loadAllImagesInDirectory(images[currentIndex]);                
+            }
+
+            currentIndex = 0;
         }
 
         private void BCIV_form_Resize(object sender, EventArgs e)
