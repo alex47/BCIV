@@ -222,30 +222,36 @@ namespace BCIV
 
         private void nextImageButton_Click(object sender, EventArgs e)
         {
-            if(currentIndex + 1 < images.Count)
+            if(images.Count > 0)
             {
-                currentIndex++;                
-            }
-            else
-            {
-                currentIndex = 0;
-            }
+                if (currentIndex + 1 < images.Count)
+                {
+                    currentIndex++;
+                }
+                else
+                {
+                    currentIndex = 0;
+                }
 
-            loadImageToPictureBox(images[currentIndex]);
+                loadImageToPictureBox(images[currentIndex]);
+            }
         }
 
         private void previousImageButton_Click(object sender, EventArgs e)
         {
-            if (currentIndex > 0)
+            if (images.Count > 0)
             {
-                currentIndex--;                              
-            }
-            else
-            {
-                currentIndex = images.Count - 1;
-            }
+                if (currentIndex > 0)
+                {
+                    currentIndex--;
+                }
+                else
+                {
+                    currentIndex = images.Count - 1;
+                }
 
-            loadImageToPictureBox(images[currentIndex]);
+                loadImageToPictureBox(images[currentIndex]);
+            }
         }
 
         private void BCIV_form_Resize(object sender, EventArgs e)
