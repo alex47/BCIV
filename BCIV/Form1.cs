@@ -43,6 +43,8 @@ namespace BCIV
         {
             InitializeComponent();
             init();
+
+            loadOneImage(imagePath);
         }
 
         //Called when there are more init images
@@ -50,6 +52,8 @@ namespace BCIV
         {
             InitializeComponent();
             init();
+
+            loadMultipleImages(imagesPath);
         }
 
         private void init()
