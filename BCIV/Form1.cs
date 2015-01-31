@@ -141,7 +141,8 @@ namespace BCIV
             resizeWindowToLoadedImage();
 
             //pictureBox.Image = loadedImage;
-//TODO: change window title to file name or path
+
+            this.Text = "[BCIV] - " + Path.GetFileName(images[currentIndex]);
         }
 
         private void resizeWindowToLoadedImage()
@@ -161,7 +162,7 @@ namespace BCIV
 
                 this.Width = newWidth;
                 this.Height = newHeight;
-//TODO: GIF image resolution larger than screen resolution will display as static image
+//TODO: GIF image resized will display as static image
 
 
 
