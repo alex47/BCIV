@@ -84,6 +84,7 @@
             this.editButton.TabIndex = 3;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             this.editButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.editButton_PreviewKeyDown);
             // 
             // BCIV_form

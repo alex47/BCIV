@@ -61,11 +61,11 @@ namespace BCIV
             pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             imagePanel.AutoScroll = true;
 
-
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
             previousImageButton.Location = new Point(this.Width / 2 - 86, this.Height - 75);
 
             this.KeyPreview = true;
+            editButton.Enabled = false;
 
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
@@ -159,6 +159,8 @@ namespace BCIV
         {
             int screenWidth = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
             int screenHeight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+
+            editButton.Enabled = true;
 
             if (loadedImage.Width > screenWidth || loadedImage.Height > screenHeight)
             {
@@ -404,6 +406,11 @@ namespace BCIV
                 //TODO: + (Add) - (Subtract) ZOOM image
                 //MessageBox.Show("LENYOMVA: " + key);
             }
+        }
+
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("mspaint.exe", images[currentIndex]);
         }
     }
 }
