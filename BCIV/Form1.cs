@@ -29,6 +29,7 @@ namespace BCIV
 
         private Image loadedImage;
         private int currentIndex;
+        private double zoomScale;
         private bool isGroupImages;
 
         //Called without init image
@@ -67,8 +68,14 @@ namespace BCIV
             this.KeyPreview = true;
             editButton.Enabled = false;
 
+            zoomScale = 1.0;
+
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
+
+            this.previousImageButton.MouseWheel += new System.Windows.Forms.MouseEventHandler(mouseWheelEvent);
+            this.nextImageButton.MouseWheel += new System.Windows.Forms.MouseEventHandler(mouseWheelEvent);
+            this.editButton.MouseWheel += new System.Windows.Forms.MouseEventHandler(mouseWheelEvent);
         }
 
         //Adds the image to the list and adds all the images in the directory to the list
@@ -107,7 +114,10 @@ namespace BCIV
             {
                 loadAllImagesInDirectory(imagePath);
 
-                loadImageToPictureBox(images[0]);
+                if(images.Count > 0)
+                {
+                    loadImageToPictureBox(images[0]);
+                }
             }
         }
 
@@ -142,6 +152,8 @@ namespace BCIV
         //Load image to pictureBox
         private void loadImageToPictureBox(string imagePath)
         {
+            zoomScale = 1.0;
+
             loadedImage = Image.FromFile(imagePath);
             resizeWindowToLoadedImage();
 
@@ -179,12 +191,12 @@ namespace BCIV
 
 
 //TODO: GIF image resized will display as static image
-                FrameDimension dimension = new FrameDimension(loadedImage.FrameDimensionsList[0]);
+                //FrameDimension dimension = new FrameDimension(loadedImage.FrameDimensionsList[0]);
 
-                if(images[currentIndex].ToLower().EndsWith("gif") && loadedImage.GetFrameCount(dimension) > 1)
-                {
+                //if(images[currentIndex].ToLower().EndsWith("gif") && loadedImage.GetFrameCount(dimension) > 1)
+                //{
                     
-                }
+                //}
 
 
 
@@ -230,6 +242,7 @@ namespace BCIV
 
             if(Directory.Exists(imagePath))
             {
+                isGroupImages = true;
                 filesInDirectory = supportedFormats.SelectMany(filter => Directory.GetFiles(imagePath, "*." + filter, SearchOption.TopDirectoryOnly)).ToArray();
             }
 
@@ -323,6 +336,8 @@ namespace BCIV
 
         private void BCIV_form_Resize(object sender, EventArgs e)
         {
+            
+
             imagePanel.Size = new Size(this.Width - 40, this.Height - 93);
 
             nextImageButton.Location = new Point(this.Width / 2 + 5, this.Height - 75);
@@ -368,12 +383,17 @@ namespace BCIV
                 }
             }
 
-            pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(newWidth, newHeight)));
-
-            int newX = (imagePanel.Width / 2) - (pictureBox.Width / 2) ;
+            int newX = (imagePanel.Width / 2) - (pictureBox.Width / 2);
             int newY = (imagePanel.Height / 2) - (pictureBox.Height / 2);
 
             pictureBox.Location = new Point(newX, newY);
+
+            if (zoomScale != 1.0)
+            {
+                return;
+            }
+
+            pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size(newWidth, newHeight)));
         }
 
         private void previousImageButton_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -393,24 +413,65 @@ namespace BCIV
         
         private void keyEvents(Keys key)
         {
-            if (key.ToString() == "Left" || key.ToString() == "Up")
+            if (key == Keys.Left || key == Keys.Up)
             {
                 previousImageButton_Click(null, null);
             }
-            else if (key.ToString() == "Right" || key.ToString() == "Down")
+            else if (key == Keys.Right || key == Keys.Down)
             {
                 nextImageButton_Click(null, null);
             }
-            else
+            else if (key == Keys.Add)
             {
-                //TODO: + (Add) - (Subtract) ZOOM image
-                //MessageBox.Show("LENYOMVA: " + key);
+                zoomImage();
+            }
+            else if (key == Keys.Subtract)
+            {
+                unzoomImage();
             }
         }
 
         private void editButton_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("mspaint.exe", images[currentIndex]);
+        }
+
+        private void mouseWheelEvent(object sender, MouseEventArgs e)
+        {
+            if(e.Delta * SystemInformation.MouseWheelScrollLines / 120 > 0)
+            {
+                zoomImage();
+            }
+            else
+            {
+                unzoomImage();
+            }
+        }
+
+        private void zoomImage()
+        {
+            if (loadedImage != null)
+            {
+                zoomScale += 0.1;
+                //this.Size = new Size(this.Width + zoomScale * 10, this.Height + zoomScale * 10);
+
+                pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size((int)(loadedImage.Width * zoomScale), (int)(loadedImage.Height * zoomScale))));
+
+                //resizeWindowToPictureBoxImage();
+            }
+        }
+
+        private void unzoomImage()
+        {
+            if (loadedImage != null)
+            {
+                zoomScale -= 0.1;
+                //this.Size = new Size(this.Width + zoomScale * 10, this.Height + zoomScale * 10);
+
+                pictureBox.Image = (Image)(new Bitmap(loadedImage, new Size((int)(loadedImage.Width * zoomScale), (int)(loadedImage.Height * zoomScale))));
+
+                //resizeWindowToPictureBoxImage();
+            }
         }
     }
 }
